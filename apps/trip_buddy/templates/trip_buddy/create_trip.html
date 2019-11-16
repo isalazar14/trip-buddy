@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Create a Trip</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
+  <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+  <style>
+    .container{
+      margin: 20px auto;
+    }
+
+    .text-right{
+      text-align: right;
+    }
+
+    .nav{
+      /* margin: 10px auto; */
+    }
+
+    .nav>*{
+      display: inline-block;
+      vertical-align: top;
+    }
+    
+    .nav.buttons{
+      float:right;
+    }
+
+    .errors{
+      margin-bottom: 20px;
+    }
+
+    table.table{
+      width: 80%;
+      margin: 0px auto;
+      position: relative
+    }
+
+    table.table label{
+      position: relative;
+      left: 50px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="nav">
+      <h2 class="subtitle is-4">Hello {{ fname }}!</h2>
+      <div class="nav buttons" style="float: right;">
+        <a class="button is-link" href="/trips">Dashboard<a>
+        <a class="button is-danger" href="/logout">Log Out</a>
+      </div>
+    </div>
+        
+    <div class="content">
+      <h3 class="title">Create a trip!</h3>
+      {% if messages%}
+      <div class="errors is-warning">
+        <ul>
+        {% for msg in messages %}
+          <li {% if msg.tags %} class="{{ msg.tags }}" {% endif %}>{{ msg }}</li>
+        {% endfor %}
+        </ul>
+      </div>
+      {% endif %}
+      <form class="form" action="{% url 'trips:create' %}" method="POST">
+      {% csrf_token %}
+        <table class="table">
+          <tr>
+            <td><label for="name">Trip name</label></td>
+            <td><input type="text" name="name" id="name"></td>
+          </tr>
+          <tr>
+            <td><label for="destination">Destination</label></td>
+            <td><input type="text" name="destination" id="destination"></td>
+          </tr>
+          <tr>
+            <td><label for="start">Start Date</label></td>
+            <td><input type="date" name="start" id="start"></td>
+          </tr>
+          <tr>
+            <td><label for="end">End Date</label></td>
+            <td><input type="date" name="end" id="end"></td>
+          </tr>
+          <tr>
+            <td><label for="plan">Plan</label></td>
+            <td><textarea name="plan" id="plan" cols="30" rows="5"></textarea></td>
+          </tr>
+          <td>
+            <button class="button is-primary">Create trip</button>
+          </td>
+        </table>
+      </form>
+    </div>
+  </div>
+</body>
+</html>

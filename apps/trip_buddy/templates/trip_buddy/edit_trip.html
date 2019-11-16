@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Create a Trip</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
+  <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+  <style>
+    .container{
+      margin: 20px auto;
+    }
+    
+    .text-right{
+      text-align: right;
+    }
+
+    .nav{
+      margin: 10px auto;
+    }
+
+    .nav>*{
+      display: inline-block;
+      vertical-align: top;
+    }
+
+    .nav.buttons{
+      float:right;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="nav">
+      <h3 class="subtitle">Hello {{ fname }}! Let's edit your trip!</h3>
+      <div class="nav buttons" style="float: right;">
+        <a class="button is-link" href="{% url 'trips:dash' %}">Dashboard<a>
+        <a class="button is-danger" href="/logout">Log Out</a>
+      </div>
+    </div>
+
+    <div class="content">
+      {% if messages%}
+      <div class="errors is-warning">
+        <ul>
+        {% for msg in messages %}
+          <li {% if msg.tags %} class="{{ msg.tags }}" {% endif %}>{{ msg }}</li>
+        {% endfor %}
+        </ul>
+      </div>
+      {% endif %}
+      <h1 class="title">{{ trip.name }}</h1>
+      <form class="form" action="/trips/{{trip.id}}/edit" method="POST">
+      {% csrf_token %}
+        <label for="name">Trip name</label>
+        <input type="text" name="name" id="name" value="{{trip.name}}">
+        <br>
+        <label for="destination">destination</label>
+        <input type="text" name="destination" id="destination" value="{{trip.destination}}">
+        <br>
+        <label for="start">Start Date</label>
+        <input type="date" name="start" id="start" value="{{trip.start|date:'Y-m-d'}}">
+        <br>
+        <label for="end">End Date</label>
+        <input type="date" name="end" id="end" value="{{trip.end|date:'Y-m-d'}}">
+        <br>
+        <label for="plan">Plan</label>
+        <br>
+        <textarea name="plan" id="plan" cols="30" rows="5">{{trip.plan}}</textarea>
+        <br>
+        <button class="button is-primary">Update</button>
+      </form>
+    </div>
+  </div>
+</body>
+</html>

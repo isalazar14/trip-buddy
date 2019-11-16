@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Login / Register</title>
+  <style type="text/css">
+    /* div.column * {
+      margin: 0px auto;
+    } */
+  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" integrity="sha256-OweaP/Ic6rsV+lysfyS4h+LM6sRwuO3euTYfr6M124g=" crossorigin="anonymous" />
+
+  {% load static %}
+  <!-- <link rel="stylesheet" href="login_reg_app/materialize.css"> -->
+</head>
+<body>
+  <div class="container">
+    {% if messages %}
+    <div>
+      <ul>
+      {% for msg in messages %}
+        <li {% if msg.tags %} clsas="{{ msg.tags }}" {% endif %}>{{ msg }}</li>
+      {% endfor %}
+      </ul>
+    </div>
+    {% endif %}
+    <div class="col s6">
+      <div>
+        <h1>Registration</h1>
+        <form action="/register" name="registration" method="POST">
+          {% csrf_token %}
+          <label for="fname">First Name: </label>
+          <input type="text" name="fname" id="fname" required><br>
+          <label for="lname">Last Name: </label>
+          <input type="text" name="lname" id="lname" required><br>
+          <label for="dob">Date of Birth: </label>
+          <input type="date" name="dob" id="dob" required><br>
+          <label for="email">Email: </label>
+          <input type="text" name="email" id="email" required><br>
+          <label for="email_conf">Confirm email: </label>
+          <input type="text" name="email_conf" id="email_conf" required><br>
+          <label for="pw">Create Password: </label>
+          <input type="password" name="pw" id="pw" required><br>
+          <label for="pw_conf">Confirm Password: </label>
+          <input type="password" name="pw_conf" id="pw_conf" onblur="check_pw_match()" required><br>
+          <button id="register-btn">Register</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="col s6">
+      <div>
+        <h1>Login</h1>
+        <form action="/login" name="login" method="POST">
+          {% csrf_token %}
+          <label for="email">Email: </label>
+          <input type="text" name="email" id="email"><br>
+          <label for="pw">Password: </label>
+          <input type="password" name="pw" id="pw"><br>
+          <button id="login-btn">Log In</button>
+  
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function check_pw_match() {
+      var pw = document.getElementById("pw").value;
+      var pw_conf = document.getElementById("pw_conf").value
+      if (pw != pw_conf) {
+        document.getElementById("register-btn").disabled = true
+      }
+      else {
+        document.getElementById("register-btn").disabled = false
+      }
+
+    }
+  </script>
+</body>
+</html>

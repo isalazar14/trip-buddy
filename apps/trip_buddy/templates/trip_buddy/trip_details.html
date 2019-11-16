@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>{{trip.name}}</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
+  <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+  <style>
+    .container{
+      margin: 20px auto;
+    }
+    
+    .text-right{
+      text-align: right;
+    }
+
+    .nav{
+      margin: 10px auto;
+      vertical-align: top;
+    }
+
+    .nav>*{
+      display: inline-block;
+      vertical-align: middle;
+    }
+    .nav.buttons{
+      float:right
+    }
+
+    /* table.table{
+      margin-left: auto;
+      margin-right: auto;
+    } */
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="nav">
+      <h3 class="subtitle">Hello {{ fname }}!</h3>
+      <div class="nav buttons" style="float: right;">
+        <a class="button is-link" href="{% url 'trips:dash' %}">Dashboard<a>
+        <a class="button is-danger" href="/logout">Log Out</a>
+      </div>
+    </div>
+    <div class="content">
+      <h1 class="title">{{trip.name}}</h1>
+      <div class="trip-details">
+        <table class="table is-striped is hoverable">
+          <tr>
+            <td class="text-right">Start Date</td>
+            <td>{{trip.start}}</td>
+          </tr>
+          <tr>
+            <td class="text-right">End Date</td>
+            <td>{{trip.end}}</td>
+          <tr>
+          </tr>
+            <td class="text-right">Created on</td>
+            <td>{{trip.created_at|date:'m/d/y'}}</td>
+          <tr>
+          </tr>
+            <td class="text-right">Last updated</td>
+            <td>{{trip.updated_at|date:'m/d/y'}}</td>
+          <tr>
+          </tr>
+            <td class="text-right">Plan</td>
+            <td>{{trip.plan}}</td>
+          <tr>
+          </tr>
+            <td class="text-right">Created By</td>
+            <td>{{trip.created_by}}</td>
+          </tr>
+        </table>
+        <div>
+        {% if people %}
+          <p>People who've joined the trip</p>
+          <ul style="list-style: none;">
+          {% for person in people %}
+            <li>{{person.fname}}</li>
+          {% endfor %}
+          </ul>
+        {% else %}
+          <p>Nobody has joined the trip yet.</p>
+          <a class="button is-link" href="#">Invite People</a>
+        {% endif %}
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+</body>
+</html>

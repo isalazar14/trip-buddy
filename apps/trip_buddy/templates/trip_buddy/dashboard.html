@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Trips Dashboard</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
+  <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+  <style>
+    .container{
+      margin: 20px auto;
+    }
+    
+    .title, .subtitle{
+      text-align:center;
+    }
+
+    .as-link{
+      background: none!important;
+      border: none;
+      padding: 0!important;
+      /*optional*/
+      font-family: arial, sans-serif;
+      /*input has OS specific font-family*/
+      color: #069;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+    .nav{
+      /* margin: 10px auto; */
+    }
+
+    .nav>*{
+      display: inline-block;
+      vertical-align: top;
+     }
+    
+    .nav.buttons{
+      float:right
+    }
+
+    table.table{
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .table>td>form{
+      display: inline-block;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- hello and logout at the very top -->
+    <div class="nav">
+      <h3 class="title is-4">Hello {{ user.fname }}!</h3>
+      <div class="nav buttons" style="float: right;">
+        <a class="button is-danger" href="/logout">Log Out</a>
+      </div>
+    </div>
+
+
+    <div class="">
+      <!-- user trips -->
+      <div class="my-trips">
+        <p class="title is-3">Your trips</p>
+        <div>
+        </div> 
+        <!-- if user has trips, make table of trips -->
+        {% if my_trips %}
+        <p style="text-align: right;"><a class="button is-primary btn" href="{% url 'trips:create' %}">New trip</a></p>
+        <table class="table is-striped is-hoverable">
+          <!-- table headers -->
+          <tr>
+            <th>Name</th>
+            <th>Destination</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Plan</th>
+            <th>Actions</th>
+          </tr>
+  
+          <!-- template for each trip in separate row -->
+          {% for trip in my_trips %}
+            <tr>
+              <td>
+                <!-- form version of link to trip details -->
+                
+                <a href="/trips/{{trip.id}}">{{ trip.name }}</a>
+              </td>
+              <td>
+                {{ trip.destination }}
+              </td>
+              <td>
+                {{ trip.start|date:'m/d/y' }}
+              </td>
+              <td>
+                {{ trip.end|date:'m/d/y' }}
+              </td>
+              <td>
+                {{ trip.plan }}
+              </td>
+  
+  <!-- insert black belt 'actions' cell here -->
+  <!-- creators can edit and remove their own trips -->
+            <!-- actions available, depend on if user created trip -->
+            <td>
+          {% if trip.created_by == user %}
+          <!-- creators can edit and remove their own trips -->
+              <form action="/trips/{{trip.id}}/edit">
+                {% csrf_token %}
+                <input type="hidden" name="tid" value="{{trip.id}}">
+                <button class="button is-link btn">Edit</button>
+              </form>
+              <form action="/trips/{{trip.id}}/remove">
+                {% csrf_token %}
+                <input type="hidden" name="tid" value="{{trip.id}}">
+                <button class="button is-danger btn" onclick="confirm('Are you sure you want to delete this trip? This cannot be undone');">Remove</button>
+              </form>
+          {% else %}
+          <!-- attendees can leave trips they've joined -->
+              <form action="{% url 'trips:leave' %}" method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="tid" value="{{trip.id}}">
+                <button class="button is-warning btn" onclick="confirm('Are you sure you want to leave this trip? (You may re-join the trip later if you wish)');">Leave Trip</button>
+              </form>
+          {% endif %}
+            </td>
+  <!-- black belt 'actions' cell ends here -->
+            </tr>
+          {% endfor %}
+        </table>
+        
+  
+        {% else %}
+        <!-- if user has no trips, no table, just text and 'add trip' button -->
+        <div class="no-trips">
+          <h3 class="title 4">You don't have any trips!</h3>
+          <p style="text-align: center;"><a class="button is-primary btn" href="{% url 'trips:create' %}">Add a trip</a></p>
+          <!-- <button></button> -->
+        </div>
+        {% endif %}
+      </div>
+  
+      <!-- other trips -->
+      <div class="other-trips" style="margin-top:30px;">
+        <p class="title is-4">Other people's trips</p>
+        {% if other_trips %}
+        <table class="table is-striped is-hoverable">
+          <!-- table headers -->
+          <tr>
+            <th>Name</th>
+            <th>Destination</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Plan</th>
+            <th>Actions</th>
+          </tr>
+  
+          <!-- template for each trip in separate row -->
+          {% for trip in other_trips %}
+          <tr>
+            <td>
+              <a href="/trips/{{trip.id}}">{{ trip.name }}</a>
+            </td>
+            <td>
+              {{ trip.destination }}
+            </td>
+            <td>
+              {{ trip.start|date:'m/d/y' }}
+            </td>
+            <td>
+              {{ trip.end|date:'m/d/y' }}
+            </td>
+            <td>
+              {{ trip.plan }}
+            </td>
+            <td>
+              <form action="{% url 'trips:join' %}" method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="tid" value="{{trip.id}}">
+                <button class="button is-link btn">Join</button>
+              </form>
+            </td>
+          </tr>
+          {% endfor %}
+        </table>
+  
+        {% else %}
+        <!-- if no other people's trips -->
+        <div class="no-trips">
+          <h3 class="title 4">No other trips have been posted, yet.</h3>
+          <p style="text-align: center;"><a class="button is-link btn" href="#">Invite people!</a></p>
+          <!-- <button></button> -->
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</body>
+</html>

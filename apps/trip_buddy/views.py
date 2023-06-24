@@ -5,7 +5,12 @@ from .models import Trip
 
 # Create your views here
 def dashboard(request):
-  user = User.objects.get(id = request.session['uid'])
+  user_id = None
+  try:
+    user_id = request.session['uid']
+  except KeyError:
+    return redirect('/')
+  user = User.objects.get(id=user_id)
   data = {
     'user' : user,
     # 'my_trips' : user.trips_created.all().order_by('-created_at'),

@@ -2,20 +2,21 @@ from django.shortcuts import render, redirect, HttpResponse
 from django.contrib import messages
 from ..login_reg.models import User
 from .models import Trip
+from utils.auth import getSessionUserId
 
 # Create your views here
 def dashboard(request):
-  user_id = None
-  try:
-    user_id = request.session['uid']
-  except KeyError:
+  user_id = getSessionUserId(request)
+  if user_id == None:
     return redirect('/')
   user = User.objects.get(id=user_id)
   data = {
     'user' : user,
     # 'my_trips' : user.trips_created.all().order_by('-created_at'),
     'my_trips' : user.trips_attending.all(),
-    'other_trips': Trip.objects.exclude(created_by=user).exclude(people=user)
+    'other_trips': Trip.objects
+      .exclude(created_by=user)
+      .exclude(people=user)
   }
   return render(request, 'trip_buddy/dashboard.html', data)
   # return HttpResponse('trip buddy app home page')

@@ -27,8 +27,12 @@ load_dotenv(env_path)
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get("SECRET_KEY")
 
+
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+operation_mode = os.environ.get("OPERATION_MODE")
+if operation_mode == "DEVELOPMENT":
+    DEBUG = True 
+    print("Debug mode enabled")
 
 ALLOWED_HOSTS = []
 

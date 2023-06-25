@@ -32,7 +32,7 @@ class TripManager(models.Manager):
 
 # Create your models here.
 class Trip(models.Model):
-  created_by = models.ForeignKey(User, related_name='trips_created')
+  created_by = models.ForeignKey(User, related_name='trips_created', on_delete=models.CASCADE)
   name = models.CharField(max_length=50)
   destination = models.CharField(max_length=25)
   start = models.DateField()

@@ -2,13 +2,12 @@ from django.shortcuts import render, redirect, HttpResponse
 from django.contrib import messages
 from ..login_reg.models import User
 from .models import Trip
-from utils.auth import getSessionUserId
+from utils.auth import authenticate_user
 
 # Create your views here
-def dashboard(request):
-  user_id = getSessionUserId(request)
-  if user_id == None:
-    return redirect('/')
+@authenticate_user
+def dashboard(request, user_id): 
+  #user_id is being injected by decorator
   user = User.objects.get(id=user_id)
   data = {
     'user' : user,
@@ -21,10 +20,11 @@ def dashboard(request):
   return render(request, 'trip_buddy/dashboard.html', data)
   # return HttpResponse('trip buddy app home page')
 
-def create(request):
+@authenticate_user
+def create(request, user_id):
   if request.method=='GET':
     data = {
-      'fname' : User.objects.get(id=request.session['uid']).fname
+      'fname' : User.objects.get(id=user_id).fname
     }
     return render(request, 'trip_buddy/create_trip.html', data)
 
@@ -38,7 +38,7 @@ def create(request):
       trip = request.POST
 
     # make new trip in db
-      user = User.objects.get(id=request.session['uid'])
+      user = User.objects.get(id=user_id)
       new_trip = Trip.objects.create(
         created_by = user,
         name = trip['name'],
@@ -61,7 +61,8 @@ def details(request, tid):
   }
   return render(request, 'trip_buddy/trip_details.html', data)
 
-def edit(request, tid):
+@authenticate_user
+def edit(request, user_id, tid):
   if request.method=='GET':
     data = {
       'trip' : Trip.objects.get(id=tid)
@@ -79,18 +80,21 @@ def edit(request, tid):
     trip.save()
     return redirect('/trips')
 
-def remove(request, tid):
+@authenticate_user
+def remove(request, user_id, tid):
   Trip.objects.get(id=tid).delete()
   return redirect('/trips')
 
-def join(request):
+@authenticate_user
+def join(request, user_id):
   trip = Trip.objects.get(id=request.POST['tid'])
-  user = User.objects.get(id=request.session['uid'])
+  user = User.objects.get(user_id)
   trip.people.add(user)
   return redirect('/trips')
 
-def leave(request):
+@authenticate_user
+def leave(request, user_id):
   trip = Trip.objects.get(id=request.POST['tid'])
-  user = User.objects.get(id=request.session['uid'])
+  user = User.objects.get(id=user_id)
   trip.people.remove(user)
   return redirect('/trips')

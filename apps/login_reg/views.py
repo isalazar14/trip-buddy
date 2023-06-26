@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, HttpResponse
+from utils.auth import authenticate_user
 from .models import User
 from django.contrib import messages
 # import bcrypt
@@ -10,19 +11,16 @@ def enter(request):
   else:
     return redirect('/trips')
 
-def welcome(request):
-  if 'uid' not in request.session:
-    return redirect('/')
-  else:
-    uid = request.session['uid']
-    data = {
-      'user' : User.objects.get(id=uid)
-    }
-    return render(request, "login_reg/welcome.html", data)
+@authenticate_user
+def welcome(request, user_id):
+  data = {
+    'user' : User.objects.get(id=user_id)
+  }
+  return render(request, "login_reg/welcome.html", data)
 
 def register(request):
   if 'uid' in request.session:
-    return redirect('/trips')
+    return redirect('dash')
   else:
     errors = User.objects.reg_validator(request.POST)
     if len(errors) > 0:
@@ -57,4 +55,4 @@ def login(request):
 
 def logout(request):
   request.session.clear()
-  return redirect('/')
+  return redirect('root')

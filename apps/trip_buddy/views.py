@@ -88,7 +88,7 @@ def remove(request, user_id, tid):
 @authenticate_user
 def join(request, user_id):
   trip = Trip.objects.get(id=request.POST['tid'])
-  user = User.objects.get(user_id)
+  user = User.objects.get(id=user_id)
   trip.people.add(user)
   return redirect('/trips')
 

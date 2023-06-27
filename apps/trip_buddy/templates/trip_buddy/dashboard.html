@@ -58,7 +58,7 @@
     <div class="nav">
       <h3 class="title is-4">Hello {{ user.fname }}!</h3>
       <div class="nav buttons" style="float: right;">
-        <a class="button is-danger" href="/logout">Log Out</a>
+        <a class="button is-danger" href="{% url logout %}">Log Out</a>
       </div>
     </div>
 
@@ -89,7 +89,7 @@
               <td>
                 <!-- form version of link to trip details -->
                 
-                <a href="/trips/{{trip.id}}">{{ trip.name }}</a>
+                <a href="{% url 'trips:details' tid=trip.id %}">{{ trip.name }}</a>
               </td>
               <td>
                 {{ trip.destination }}
@@ -110,7 +110,7 @@
             <td>
           {% if trip.created_by == user %}
           <!-- creators can edit and remove their own trips -->
-              <form action="/trips/{{trip.id}}/edit">
+              <form action="{% url 'trips:edit' tid=trip.id %}">
                 {% csrf_token %}
                 <input type="hidden" name="tid" value="{{trip.id}}">
                 <button class="button is-link btn">Edit</button>

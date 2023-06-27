@@ -52,12 +52,14 @@ class UserManager(models.Manager):
       errors['pw'] = 'Password must be at least 8 characters long'
     
     if len(errors) == 0:
-      pw_hash = bcrypt.hashpw(form_data['pw'].encode(), bcrypt.gensalt())
+      salt = bcrypt.gensalt()
+      pw_hash = bcrypt.hashpw(form_data['pw'].encode(), salt)
       User.objects.create(
         fname = form_data['fname'],
         lname = form_data['lname'],
         email = form_data['email'],
         pw_hash = pw_hash,
+        salt = salt,
         dob = form_data['dob']
       )
     return errors
@@ -84,6 +86,7 @@ class User(models.Model):
   lname = models.CharField(max_length=20)
   email = models.CharField(max_length=50, unique=True)
   pw_hash = models.CharField(max_length=100)
+  salt = models.CharField(max_length=32)
   dob = models.DateField()
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)

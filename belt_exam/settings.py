@@ -36,6 +36,7 @@ if operation_mode == "DEVELOPMENT":
 
 ALLOWED_HOSTS = []
 
+APPEND_SLASH = True
 
 # Application definition
 

@@ -15,11 +15,11 @@ from dotenv import load_dotenv
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-env_path = os.path.join(BASE_DIR, ".env")
+# env_path = os.path.join(BASE_DIR, ".env")
 
-load_dotenv(env_path)
+# load_dotenv(env_path)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
@@ -29,12 +29,13 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-operation_mode = os.environ.get("OPERATION_MODE")
-if operation_mode == "DEVELOPMENT":
-    DEBUG = True 
-    print("Debug mode enabled")
 
-ALLOWED_HOSTS = []
+### Moved to environment-specific settings file.
+# DEBUG = True
+    
+
+### Moved to environment-specific settings file.
+# ALLOWED_HOSTS = []
 
 APPEND_SLASH = True
 
@@ -85,12 +86,13 @@ WSGI_APPLICATION = 'belt_exam.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
+### Moved to environment specific settings files.
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     }
+# }
 
 
 # Password validation

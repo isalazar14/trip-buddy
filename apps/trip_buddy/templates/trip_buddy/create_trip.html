@@ -50,8 +50,8 @@
     <div class="nav">
       <h2 class="subtitle is-4">Hello {{ fname }}!</h2>
       <div class="nav buttons" style="float: right;">
-        <a class="button is-link" href="/trips">Dashboard<a>
-        <a class="button is-danger" href="/logout">Log Out</a>
+        <a class="button is-link" href="{% url 'trips:dashboard' %}">Dashboard<a>
+        <a class="button is-danger" href="{% url 'auth:logout' %}">Log Out</a>
       </div>
     </div>
         
@@ -66,7 +66,7 @@
         </ul>
       </div>
       {% endif %}
-      <form class="form" action="{% url 'trips:create' %}" method="POST">
+      <form class="form" action="{% url 'trips:create_trip' %}" method="POST">
       {% csrf_token %}
         <table class="table">
           <tr>

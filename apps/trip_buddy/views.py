@@ -33,7 +33,7 @@ def create(request, user_id):
     if len(errors) > 0:
       for error, msg in errors.items():
         messages.error(request, msg)
-      return redirect('/trips/create')
+      return redirect('create_trip')
     else:
       trip = request.POST
 
@@ -50,7 +50,7 @@ def create(request, user_id):
       # add new trip to user's 'trips_attending'
       # User.objects.get(id=int(request.session['uid'])).add(new_trip)
       new_trip.people.add(user)
-      return redirect('/trips')
+      return redirect('dashboard')
 
 def details(request, tid):
   trip = Trip.objects.get(id=tid)
@@ -78,23 +78,23 @@ def edit(request, user_id, tid):
     trip.end = new['end']
     trip.plan = new['plan']
     trip.save()
-    return redirect('/trips')
+    return redirect('dashboard')
 
 @authenticate_user
 def remove(request, user_id, tid):
   Trip.objects.get(id=tid).delete()
-  return redirect('/trips')
+  return redirect('dashboard')
 
 @authenticate_user
 def join(request, user_id):
   trip = Trip.objects.get(id=request.POST['tid'])
   user = User.objects.get(id=user_id)
   trip.people.add(user)
-  return redirect('/trips')
+  return redirect('dashboard')
 
 @authenticate_user
 def leave(request, user_id):
   trip = Trip.objects.get(id=request.POST['tid'])
   user = User.objects.get(id=user_id)
   trip.people.remove(user)
-  return redirect('/trips')
+  return redirect('dashboard')

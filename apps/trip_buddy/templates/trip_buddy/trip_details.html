@@ -40,8 +40,8 @@
     <div class="nav">
       <h3 class="subtitle">Hello {{ fname }}!</h3>
       <div class="nav buttons" style="float: right;">
-        <a class="button is-link" href="{% url 'trips:dash' %}">Dashboard<a>
-        <a class="button is-danger" href="/logout">Log Out</a>
+        <a class="button is-link" href="{% url 'trips:dashboard' %}">Dashboard<a>
+        <a class="button is-danger" href="{% url 'auth:logout' %}">Log Out</a>
       </div>
     </div>
     <div class="content">
@@ -83,7 +83,7 @@
           </ul>
         {% else %}
           <p>Nobody has joined the trip yet.</p>
-          <a class="button is-link" href="#">Invite People</a>
+          {% comment %} <a class="button is-link" href="#">Invite People</a> {% endcomment %}
         {% endif %}
         </div>
       </div>

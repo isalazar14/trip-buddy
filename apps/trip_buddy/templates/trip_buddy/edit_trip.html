@@ -35,8 +35,8 @@
     <div class="nav">
       <h3 class="subtitle">Hello {{ fname }}! Let's edit your trip!</h3>
       <div class="nav buttons" style="float: right;">
-        <a class="button is-link" href="{% url 'trips:dash' %}">Dashboard<a>
-        <a class="button is-danger" href="/logout">Log Out</a>
+        <a class="button is-link" href="{% url 'trips:dashboard' %}">Dashboard<a>
+        <a class="button is-danger" href="{% url 'auth:logout' %}">Log Out</a>
       </div>
     </div>
 
@@ -51,7 +51,7 @@
       </div>
       {% endif %}
       <h1 class="title">{{ trip.name }}</h1>
-      <form class="form" action="/trips/{{trip.id}}/edit" method="POST">
+      <form class="form" action="{% url 'trips:edit_trip' tid=trip.id %}" method="POST">
       {% csrf_token %}
         <label for="name">Trip name</label>
         <input type="text" name="name" id="name" value="{{trip.name}}">

@@ -9,7 +9,7 @@ def enter(request):
   if 'uid' not in request.session:
     return render(request, "login_reg/login_reg.html")
   else:
-    return redirect('/trips')
+    return redirect('dashboard')
 
 @authenticate_user
 def welcome(request, user_id):
@@ -20,7 +20,7 @@ def welcome(request, user_id):
 
 def register(request):
   if 'uid' in request.session:
-    return redirect('dash')
+    return redirect('dashboard')
   else:
     errors = User.objects.reg_validator(request.POST)
     if len(errors) > 0:
@@ -34,24 +34,24 @@ def register(request):
       user = User.objects.filter(email = request.POST['email'])
       user = user[0]
       request.session['uid'] = user.id
-      return redirect('/trips')
+      return redirect('dashboard')
 
 def login(request):
   if 'uid' in request.session:
-    return redirect('/trips')
+    return redirect('dashboard')
   else:
     errors = User.objects.login_validator(request.POST)
     if len(errors) > 0:
       for error, msg in errors.items():
         messages.error(request, msg)
-      return redirect('/')
+      return redirect('root')
     else:
       user = User.objects.filter(email = request.POST['email'])
       user = user[0]
       # if bcrypt.checkpw(request.POST['pw'].encode(), user.pw_hash.encode()):
       #   return render(request, "login_reg/welcome.html")
       request.session['uid'] = user.id
-      return redirect('/trips')
+      return redirect('dashboard')
 
 def logout(request):
   request.session.clear()
